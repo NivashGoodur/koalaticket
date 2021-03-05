@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Configuration du site{% endblock %}
+
+{% block articles %}
+
+<!--Message popup succes-->
+        <div class="popupSuccess">
+        {% for message in app.flashes('presetSite') %}
+        <div class="success-div swashOut">{{ message }}</div>
+        {% endfor %}
+        </div>
+
+<div class="line_horizontal"></div>
+        <div class="head_ticket">
+            <div class="head_ticket_btn">
+                <div class="ticket_title">
+                    <p>Configuration de votre système ticket</p>
+                </div>
+                 <div class="btn_box">
+                    <a class="primary_btn_white" href="{{ path('dash_client')}}">Retour</a>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block body %}
+    <section class="statut_top">
+        <div class="statut" id="statut">
+            <div class="statut_text">
+                <p>Personnalisez votre système.</p>
+                <p>Le copyright n'est pas modifiable.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="formPictureFull">
+        <div class="profile_update_box">   
+            <div class="formPicture">
+                <form name="config" method="post" enctype="multipart/form-data" style="width: 100%;">
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Nom de votre site</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-bookmark"></i>
+                            <input type="text" id="config_name" name="config[name]" required="required" class="login_input" placeholder="Nom du site" value="{% if config == null %}{% else %}{{config.name}}{% endif %}">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Logo de votre site</p>
+                        </div>
+                        <div class="login_input_full">
+                            {% if config == null %}
+                            {% else %}
+                            <img src="{{asset(config.logo)}}" class="configImg">
+                            {% endif %}
+                            <input type="file" id="config_logo" name="config[logo]" class="login_input" style="{% if config == null %}{% else %} text-align: end; {% endif %}" value="{% if config == null %}{% else %}{{config.logo}}{% endif %}">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Couleur secondaire</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-eye-dropper"></i>
+                            <input type="text" id="config_color" name="config[color]" required="required" class="login_input" placeholder="Couleur HEXA, laissez vide pour garder l'actuelle" value="{% if config == null %}{% else %}{{config.color}}{% endif %}">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Nom du staff</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-users"></i>
+                            <input type="text" id="config_staff_name" name="config[staff_name]" required="required" class="login_input" placeholder="Le nom de votre équipe" value="{% if config == null %}{% else %}{{config.staffName}}{% endif %}">
+                        </div>
+                    </div>
+                    <div>
+                        {{ form_row(form._token) }}
+                    </div>
+                    <button type="submit" id="config_save" name="config[save]" class="login_button input_size_ticket" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Valider</button>
+                </form>
+            </div>
+            <div class="formPicture marginPictureBox">
+                <div class="ticket_information_box no_top_margin">
+                    <p>Ajoutez des membres à votre équipe</p>
+                    <a href="{{path('addusers')}}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Ajouter</a>
+                </div>
+                <div class="ticket_information_box">
+                    <p>Liste des membres de votre équipe</p>
+                    <a href="{{path('addusers')}}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Voir la liste</a>
+                </div>
+                <div class="ticket_information_box">
+                    <p>Activer le mode maintenance</p>
+                    <a href="{{path('addusers')}}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Maintenance</a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Koala Ticket - Connexion</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/animation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/magic.min.css') }}">
+
+    {# Inclusion des fichiers CSS individuel de la page #}
+    {% block css %}
+    {% endblock %}
+</head>
+
+<body class="login" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">
+
+    <!-- Message popup success -->
+        <div class="popupSuccess">
+        {% for message in app.flashes('registerSuccess') %}
+        <div class="success-div swashOut">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('logoutSuccess') %}
+        <div class="success-div swashOut">{{ message }}</div>
+        {% endfor %}
+        </div>
+
+<form method="post" class="login_form">
+    <img src="{% if config == null %}{{ asset('images/koala.png')}}{% else %}{{ asset(config.logo)}}{% endif %}" class="login_logo" alt="logo du site">
+    {% if error %}
+        <div class="login_errors">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <div class="login_input_full">
+        <i class="fas fa-user"></i>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="login_input" placeholder="Adresse email" autofocus>
+    </div>
+    <div class="login_input_full">
+        <i class="fas fa-unlock-alt"></i>
+        <input type="password" name="password" id="inputPassword" class="login_input" placeholder="Mot de passe">
+    </div>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+
+    {#
+        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+    #}
+
+    <button class="login_button" type="submit" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">
+        Connexion
+    </button>
+</form>
+<div class="login_form m_margin_none">
+    <a href="{{ asset('register') }}" class="already_account_link">Je n'ai pas encore de compte <i class="fas fa-arrow-right"></i></a>
+</div>
+</body>

@@ -1,0 +1,33 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Erreur 502{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/animation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/magic.min.css') }}">
+    {% if (app.user.nightmode == '{{asset("css/nightmode.css")}}') %}
+        <link rel="stylesheet" href="{{ asset('css/nightmode.css') }}">
+    {% endif %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
+
+    {# Inclusion des fichiers CSS individuel de la page #}
+    {% block css %}{% endblock %}
+</head>
+<body>
+    {% block body %}
+        <div class="error_400">
+            <div class="error_box">
+                <h1>Error 502</h1>
+                <p>Erreur proxy, vérifiez votre connexion</p>
+                <a class="primary_btn_return" href="{{ path('dash_client') }}">Retourner sur le site</a>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+</html>

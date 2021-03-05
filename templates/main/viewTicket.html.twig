@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voir mon ticket{% endblock %}
+
+{% block articles %}
+    <!-- Message popup success-->
+        <div class="popupSuccess">
+        {% for message in app.flashes('newTicketSuccess') %}
+        <div class="success-div swashOut">{{ message }}</div>
+        {% endfor %}
+        </div>
+
+<div class="line_horizontal"></div>
+        <div class="head_ticket">
+            <div class="head_ticket_title">
+                <h2>Ticket #{{ actualTicket.id }}</h2>
+            </div>
+            <div class="head_ticket_btn">
+                <div class="ticket_title">
+                    <p>{{ actualTicket.title }}</p>
+                </div>
+                 <div class="btn_box">
+                    <a class="primary_btn_white" href="{{ path('dash_client')}}">Retour</a>
+                    {% if actualTicket.statement != 'fermé' %}
+                    <a onclick="return confirm('Êtes-vous sûr de vouloir fermer ce ticket ?')" class="primary_btn_red" href="{{ path('close_ticket' , {'slug': actualTicket.slug}) }}">Fermer le ticket</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block body %}
+
+<section class="statut_top">
+        <div class="statut statut_reset" id="statut">
+            <div class="statut_text statut_width">
+
+        {# Affichage du contenu du premier ticket #}
+                <div class="client_response">
+                    <div class="client_response_header">
+                        <div class="client_ticket_info_box">
+                            <div>
+                                {% if (actualTicket.Owner.picture == null) %}
+                                <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                {% else %}
+                                <img src="{{ asset(actualTicket.Owner.picture) }}" alt="" class="ticket_img">
+                                {% endif %}
+                            </div>
+                            <div class="client_info">
+                                <p>{{actualTicket.Owner.firstname}} {{actualTicket.Owner.lastname}}</p>
+                                <p>Client</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="response_date" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">{{actualTicket.creationDate|date('d/m/Y à H\\hi')}}</p>
+                        </div>
+                    </div>
+                    <div class="ticket_line"></div>
+                    <div class="ticket_client_message">
+                        <p>{{actualTicket.content|nl2br}}</p>
+                    </div>
+                </div>
+        {# Affichage du contenu du premier ticket #}
+
+
+
+
+        {% for MessageDisplay in messageConversation %}
+            {# Affichage d'une boite de message #}
+            {% if MessageDisplay.author.roles[0] == 'ROLE_ADMIN' %}
+                <div class="client_response" style="{% if config == null %}{% else %}background-color:{{config.color}};color:white;{% endif %}">
+            {% else %}
+                <div class="client_response">
+            {% endif %}
+                    <div class="client_response_header">
+                        <div class="client_ticket_info_box">
+                            <div>
+                                {% if (MessageDisplay.author.picture == null) %}
+                                <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                {% else %}
+                                <img src="{{ asset(MessageDisplay.author.picture) }}" alt="" class="ticket_img">
+                                {% endif %}
+                            </div>
+                            <div class="client_info">
+                                <p>{{ MessageDisplay.author.lastname }} {{ MessageDisplay.author.firstname }}</p>
+                                {% if MessageDisplay.author.roles[0] == 'ROLE_ADMIN' %}
+                                <p>{% if config == null %}De l'équipe Koala Ticket{% else %}{{config.staffName}}{% endif %}</p>
+                                {% else %}
+                                <p>Client</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div>
+                        {% if MessageDisplay.author.roles[0] == 'ROLE_ADMIN' %}
+                            <p class="response_date" style="background-color:white !important;color:black;">{{ MessageDisplay.date|date('d/m/Y à H\\hi') }}</p>
+                        {% else %}
+                            <p class="response_date" style="{% if config == null %}{% else %}background-color:{{config.color}} !important;{% endif %}">{{ MessageDisplay.date|date('d/m/Y à H\\hi') }}</p>
+                        {% endif %}
+                        </div>
+                    </div>
+                    <div class="ticket_line"></div>
+                    <div class="ticket_client_message">
+                        <p>{{ MessageDisplay.content|nl2br }}</p>
+                    </div>
+                </div>
+
+        {# Affichage d'une boite de message CLIENT  #}
+        {% endfor %}
+
+        {# Affichage du formulaire de réponse si le ticket n'est pas fermé #}
+        {% if actualTicket.statement != 'fermé' %}
+            <div class="client_response">
+                <form name="create_message" method="post">
+                    <div id="create_message">
+                        <div class="error_msg">
+                            {{ form_errors(form.content) }}
+                        </div>
+                        <div>
+                            {{ form_widget(form.content) }}
+                        </div>
+                        <div>
+                            <button type="submit" id="create_message_save" name="create_message[save]" class="login_button input_size_ticket submit_top" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Répondre</button>
+                        </div>
+                        {{ form_row(form._token) }}
+                    </div>
+                </form>
+            </div>
+            </div>
+            <div class="statut_btn statut_btn_width">
+                <p>{{ actualTicket.creationDate|date('d/m/Y à H\\hi') }}</p>
+                <p class="reset_margin">Actuellement {{actualTicket.Statement}}</p>
+            </div>
+            {# Si le ticket est fermé, réponse d'un bot #}
+            {% else %}
+                <div class="client_response green" style="{% if config == null %}{% else %}background-color:{{config.color}} !important;{% endif %}">
+                    <div class="ticket_client_message">
+                        <p style="text-align:center;font-size:14px">Le ticket est actuellement fermé.<br>Si vous pensez qu'il s'agit d'une erreur, ouvrez un nouveau ticket.<br>Indiquez alors la référence de ce ticket.</p>
+                    </div>
+                </div>
+        {% endif %}
+        </div>
+    </section>
+{% endblock %}

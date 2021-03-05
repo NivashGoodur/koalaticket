@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un ticket{% endblock %}
+
+{% block body %}
+
+<body>
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="login_errors" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <div class="ticket_sizing">
+        <div class="ticket_page">
+            <form class="ticket_form" name="ticket" method="POST" novalidate="novalidate">
+                <h1>Vous rencontrez un problème ? Dites-nous tout.</h1>
+                <div class="error_msg">
+                    {{ form_errors(form.title) }}
+                </div>
+                <div class="login_input_full input_size_ticket">
+                    {{ form_widget(form.title) }}
+                </div>
+                <div class="error_msg">
+                    {{ form_errors(form.content) }}
+                </div>
+                <div class="login_input_full input_size_ticket">
+                    {{ form_widget(form.content) }}
+                </div>
+                <div class="level_depart">
+                    <div class="login_input_full input_size_ticket">
+                        {{ form_widget(form.level) }}
+                    </div>
+                    <div class="login_input_full input_size_ticket margin_left_input">
+                        {{ form_widget(form.department) }}
+                        {{ form_widget(form.statement) }}
+                    </div>
+                </div>
+                <button type="submit" class="login_button input_size_ticket" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Ouvrir un ticket</button>
+                {{ form_row(form._token) }}
+            </form>
+            <div class="ticket_information centerImg">
+                <img src="{{asset('images/team.svg')}}" alt="team image">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

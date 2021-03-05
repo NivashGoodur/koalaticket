@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block articles %}
+
+<!-- message de success -->
+            <div class="popupSuccess">
+            {% for message in app.flashes('closeTicketSuccess') %}
+            <div class="success-div swashOut">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('loginSuccess') %}
+            <div class="success-div swashOut">{{ message }}</div>
+            {% endfor %}
+            </div>
+
+<!-- Affichage des articles -->
+<div class="line_horizontal margin_line "></div>
+{% endblock %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+
+    <section class="statut_top">
+        <div class="statut">
+            <div class="statut_text margin_text">
+                <p>Vous avez actuellement :</p>
+                <p>{{ ticketsAnswered|length }} ticket(s) répondu, {{ ticketsPending|length }} ticket(s) en attente et {{ ticketsClosed|length }} fermé(s)</p>
+            </div>
+        </div>
+    </section>
+    <section class="ticket">
+
+        <!-- boite blanche avec la liste des tickets (version PC)-->
+        <div class="opened">
+            <h1>Tickets en attente...</h1>
+            <table class="test">
+                <thead>
+                    <tr class="opened_title">
+                        <td class="start_ticket">Créateur</td>
+                        <td>Sujet</td>
+                        <td>Dernier message</td>
+                        <td>Numéro</td>
+                        <td class="end_ticket">Etat du ticket</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    {# Affichage des tickets en attente #}
+                    {% if ticketsPending is empty %}
+                    {% else %}
+                        {% for ticketP in ticketsPending %}
+                            <tr class="ticket_night">
+                                <td class="start_ticket">
+
+                                {% if (ticketP.owner.picture == null) %}
+                                <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                {% else %}
+                                <img src="{{ asset(ticketP.owner.picture) }}" alt="" class="ticket_img">
+                                {% endif %}
+
+                                <p>{{ ticketP.owner.lastname }} {{ ticketP.owner.firstname }}<br>{{ ticketP.creationDate|date('d/m/Y à H\\hi') }}</p></td>
+                                <td>{{ticketP.title}}</td>
+                                <td>{{ ticketP.updateTime|date('d/m/Y à H\\hi') }}</td>
+                                <td>#{{ ticketP.id }}</td>
+                                <td class="end_ticket"><a href="{{path('view_ticket', {'slug': ticketP.slug} ) }}" class="primary_btn_wait">{{ ticketP.statement|capitalize }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- boite blanche avec la liste des tickets(version mobile)-->
+        <div class="opened_mobile">
+            <h1>Tickets en attente...</h1>
+            {# Affichage des tickets en attente #}
+            {% if ticketsPending is empty %}
+            {% else %}
+                    {% for ticketP in ticketsPending %}
+                        <div class="ticket_box">
+                            <p>{{ ticketP.title }}</p>
+                            <p>Dernière réponse le {{ ticketP.updateTime|date('d/m/Y à H\\hi') }}</p>
+                            <a href="{{path('view_ticket', {'slug': ticketP.slug} ) }}" class="primary_btn_wait" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">{{ ticketP.statement|capitalize }}</a>
+                        </div>
+                    {% endfor %}
+            {% endif %}
+        </div>
+
+
+        <!-- boite blanche avec la liste des tickets fermés (version mobile)-->
+            <div class="opened_mobile">
+                <h1>Tickets répondus</h1>
+                {# Affichage des tickets répondus #}
+                {% if ticketsAnswered is empty %}
+                {% else %}
+                        {% for ticketA in ticketsAnswered %}
+                            <div class="ticket_box">
+                                <p>{{ ticketA.title }}</p>
+                                <p>Dernière réponse le {{ ticketA.updateTime|date('d/m/Y à H\\hi') }}</p>
+                                <a href="{{path('view_ticket', {'slug': ticketA.slug} ) }}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">{{ ticketA.statement|capitalize }}</a>
+                            </div>
+                        {% endfor %}
+                {% endif %}
+            </div>
+
+        <!-- boite blanche avec la liste des tickets -->
+        <div class="opened">
+            <h1>Tickets répondus</h1>
+            <table class="test">
+                <thead>
+                    <tr class="opened_title">
+                        <td class="start_ticket">Créateur</td>
+                        <td>Sujet</td>
+                        <td>Dernier message</td>
+                        <td>Numéro</td>
+                        <td class="end_ticket">Etat du ticket</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# Affichage des tickets répondus #}
+                    {% if ticketsAnswered is empty %}
+                        {% else %}
+                            {% for ticketA in ticketsAnswered %}
+                                <tr class="ticket_night">
+                                    <td class="start_ticket">
+                                    {% if (ticketA.owner.picture == null) %}
+                                    <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                    {% else %}
+                                    <img src="{{ asset(ticketA.owner.picture) }}" alt="" class="ticket_img">
+                                    {% endif %}
+
+                                    <p>{{ ticketA.owner.lastname|capitalize }} {{ ticketA.owner.firstname|capitalize }}<br>{{ ticketA.creationDate|date('d/m/Y à H\\hi') }}</p></td>
+                                    <td>{{ticketA.title}}</td>
+                                    <td>{{ ticketA.updateTime|date('d/m/Y à H\\hi') }}</td>
+                                    <td>#{{ ticketA.id }}</td>
+                                    <td class="end_ticket"><a href="{{path('view_ticket', {'slug': ticketA.slug} ) }}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">{{ ticketA.statement|capitalize }}</a></td>
+                                </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <!-- boite blanche avec la liste des tickets -->
+    </section>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'base.html.twig' %}
+
+{% block articles %}
+
+<!-- message de success -->
+
+            <div class="popupSuccess">
+            {% for message in app.flashes('closeTicketSuccess') %}
+            <div class="success-div swashOut">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('loginSuccess') %}
+            <div class="success-div swashOut">{{ message }}</div>
+            {% endfor %}
+            </div>
+
+<!-- Affichage des articles -->
+        <div class="line_horizontal"></div>
+        <div class="all_articles">
+            <div class="article">
+                <div class="article_box">
+                    <p class="article_title">Maintenance</p>
+                    <p class="article_desc">Afin de mettre à jour la fonctionnalité d'ajout de photo de profil, une maintenance aura lieu aujourd'hui de 17h à 18h. Nous sommes désolé pour la gêne occasioné.</p>
+                </div>
+                <div class="article_link">
+                    <p class="article_date">Le 16/11/2020</p>
+                </div>
+            </div>
+            <div class="article">
+                <div class="article_box">
+                    <p class="article_title">Nouveauté</p>
+                    <p class="article_desc">Le mode nuit est maintenant disponible, de plus, qu'importe votre navigateur, et votre appareil, votre choix reste sauvegardé !</p>
+                </div>
+                <div class="article_link">
+                    <p class="article_date">Le 16/11/2020</p>
+                </div>
+            </div>
+            <div class="article">
+                <div class="article_box">
+                    <p class="article_title">Boite de message</p>
+                    <p class="article_desc">Communiquez rapidement avec vos client grâce à nos boites de dialogues, directement sur le dashboard client.</p>
+                </div>
+                <div class="article_link">
+                    <p class="article_date">Le 16/11/2020</p>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+    <section class="statut_top">
+        <div class="statut" id="statut">
+            <div class="statut_text">
+                <p>Vous avez actuellement</p>
+                <p>{{ ticketsAnsweredClient|length }} ticket(s) répondu, {{ ticketsPendingClient|length }} ticket(s) en attente et {{ ticketsClosedClient|length }} fermé(s)</p>
+            </div>
+            <div class="statut_btn">
+                <a href="{{ path('create_ticket') }}" class="primary_btn_success grey" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Ouvrir une demande</a>
+            </div>
+        </div>
+    </section>
+    <section class="ticket">
+
+        <!-- boite blanche avec la liste des tickets (version pc)-->
+        <div class="opened">
+            <h1>Tickets ouverts</h1>
+
+            <table class="test">
+                <thead>
+                    <tr class="opened_title">
+                        <td class="start_ticket">Date de création</td>
+                        <td>Sujet</td>
+                        <td>Dernier message</td>
+                        <td>Numéro</td>
+                        <td class="end_ticket">Etat du ticket</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# Affichage des tickets répondus #}
+                    {% if ticketsAnsweredClient is empty %}
+                    {% else %}
+                        {% for ticketAC in ticketsAnsweredClient %}
+                            <tr class="ticket_night">
+                                <td class="start_ticket">
+
+                                    {% if (app.user.picture == null) %}
+                                    <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                    {% else %}
+                                    <img src="{{ asset(app.user.picture) }}" alt="" class="ticket_img">
+                                    {% endif %}
+                                
+                                <p>{{ ticketAC.owner.lastname|capitalize }} {{ ticketAC.owner.firstname|capitalize }}<br>{{ ticketAC.creationDate|date('d/m/Y à H\\hi') }}</p></td>
+                                <td>{{ticketAC.title}}</td>
+                                <td>{{ ticketAC.updateTime|date('d/m/Y à H\\hi') }}</td>
+                                <td>#{{ ticketAC.id }}</td>
+                                <td class="end_ticket"><a href="{{path('view_ticket', {'slug': ticketAC.slug} ) }}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">{{ ticketAC.statement|capitalize }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                    {# Affichage des tickets en attente #}
+                    {% if ticketsPendingClient is empty %}
+                    {% else %}
+                        {% for ticketPC in ticketsPendingClient %}
+                            <tr class="ticket_night">
+                                <td class="start_ticket">
+                                    
+                                        {% if (ticketPC.owner.picture == null) %}
+                                        <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                        {% else %}
+                                        <img src="{{ asset(app.user.picture) }}" alt="" class="ticket_img">
+                                        {% endif %}
+                                
+                                <p>{{ ticketPC.owner.lastname }} {{ ticketPC.owner.firstname }}<br>{{ ticketPC.creationDate|date('d/m/Y à H\\hi') }}</p></td>
+                                <td>{{ticketPC.title}}</td>
+                                <td>{{ ticketPC.updateTime|date('d/m/Y à H\\hi') }}</td>
+                                <td>#{{ ticketPC.id }}</td>
+                                <td class="end_ticket"><a href="{{path('view_ticket', {'slug': ticketPC.slug} ) }}" class="primary_btn_wait">{{ ticketPC.statement|capitalize }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- boite blanche avec la liste des tickets (version mobile)-->
+        <div class="opened_mobile">
+            <h1>Tickets ouverts</h1>
+            {# Affichage des tickets répondus du client #}
+            {% if ticketsAnsweredClient is empty %}
+            {% else %}
+                    {% for ticketAC in ticketsAnsweredClient %}
+                        <div class="ticket_box">
+                            <p>{{ ticketAC.title }}</p>
+                            <p>Dernière réponse le {{ ticketAC.updateTime|date('d/m/Y à H\\hi') }}</p>
+                            <a href="{{path('view_ticket', {'slug': ticketAC.slug} ) }}" class="primary_btn_success" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">{{ ticketAC.statement|capitalize }}</a>
+                        </div>
+                    {% endfor %}
+            {% endif %}
+
+            {# Affichage des tickets en attente #}
+            {% if ticketsPendingClient is empty %}
+            {% else %}
+                    {% for ticketPC in ticketsPendingClient %}
+                        <div class="ticket_box">
+                            <p>{{ ticketPC.title }}</p>
+                            <p>Dernière réponse le {{ ticketPC.updateTime|date('d/m/Y à H\\hi') }}</p>
+                            <a href="{{path('view_ticket', {'slug': ticketPC.slug} ) }}" class="primary_btn_wait">{{ ticketPC.statement|capitalize }}</a>
+                        </div>
+                    {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- boite blanche avec la liste des tickets fermés (version mobile)-->
+        <div class="opened_mobile">
+            <h1>Tickets fermés</h1>
+            {# Affichage des tickets fermés #}
+            {% if ticketsClosedClient is empty %}
+        {% else %}
+                {% for ticketCC in ticketsClosedClient %}
+                    <div class="ticket_box">
+                        <p>{{ ticketCC.title }}</p>
+                        <p>Dernière réponse le {{ ticketCC.updateTime|date('d/m/Y à H\\hi') }}</p>
+                        <a href="{{path('view_ticket', {'slug': ticketCC.slug} ) }}" class="primary_btn_close">{{ ticketCC.statement|capitalize }}</a>
+                    </div>
+                {% endfor %}
+        {% endif %}
+        </div>
+
+
+        <!-- boite blanche avec la liste des tickets fermés (Version pc)-->
+        <div class="opened">
+            <h1>Tickets fermé</h1>
+
+            <table class="test">
+                <thead>
+                    <tr class="opened_title">
+                        <td class="start_ticket">Créateur</td>
+                        <td>Sujet</td>
+                        <td>Dernier message</td>
+                        <td>Numéro</td>
+                        <td class="end_ticket">Etat du ticket</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# Affichage des tickets fermés #}
+                    {% if ticketsClosedClient is empty %}
+                    {% else %}
+                        {% for ticketCC in ticketsClosedClient %}
+                            <tr class="ticket_night">
+                                <td class="start_ticket">
+
+                                    {% if (app.user.picture == null) %}
+                                    <img src="{{ asset('images/default.png') }}" alt="" class="ticket_img">
+                                    {% else %}
+                                    <img src="{{ asset(app.user.picture) }}" alt="" class="ticket_img">
+                                    {% endif %}
+                                    
+                                <p>{{ ticketCC.owner.lastname }} {{ ticketCC.owner.firstname }} <br> {{ ticketCC.creationDate|date('d/m/Y à H\\hi') }} </p></td>
+                                <td>{{ ticketCC.title }}</td>
+                                <td>{{ ticketCC.updateTime|date('d/m/Y à H\\hi') }}</td>
+                                <td>#{{ ticketCC.id }}</td>
+                                <td class="end_ticket"><a href="{{path('view_ticket', {'slug': ticketCC.slug} ) }}" class="primary_btn_close">{{ ticketCC.statement|capitalize }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

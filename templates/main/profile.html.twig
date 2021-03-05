@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un ticket{% endblock %}
+
+{% block articles %}
+
+<!-- Affichage message de succes -->
+
+            <div class="popupSuccess">
+            {% for message in app.flashes('photoSuccess') %}
+            <div class="success-div swashOut">{{ message }}</div>
+            {% endfor %}
+            </div>
+
+<div class="line_horizontal"></div>
+        <div class="head_ticket">
+            <div class="head_ticket_btn">
+                <div class="ticket_title">
+                    <p>Mettez à jour votre profil</p>
+                </div>
+                 <div class="btn_box">
+                    <a class="primary_btn_white" href="{{ path('dash_client')}}">Retour</a>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block body %}
+<section class="statut_top">
+        <div class="statut" id="statut">
+            <div class="statut_text">
+                <p>Aucune grâce extérieure n'est complète si la beauté intérieure ne la vivifie.</p>
+                <p>La beauté de l'âme se répand comme une lumière mystérieuse sur la beauté du corps.</p>
+            </div>
+        </div>
+    </section>
+    <section class="formPictureFull">
+        <div class="profile_update_box">
+            <div class="formPicture">
+                <h2>Photo de Profil</h2>
+                    {% if (app.user.picture == null) %}
+                    <img src="{{ asset('images/default.png') }}" alt="" class="profil_picture_profil">
+                    {% else %}
+                    <img src="{{ asset(app.user.picture) }}" alt="" class="profil_picture_profil">
+                    {% endif %}
+                <form name="add_photo" method="post" enctype="multipart/form-data" style="width: 100%;">
+                    <div class="input_file_type">
+                        {{ form_widget(form.photo) }}
+                    </div>
+                    <div>
+                        {{ form_row(form._token) }}
+                    </div>
+                    <button type="submit" class="login_button input_size_ticket" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Mettre à jour</button>
+                </form>
+            </div>
+            <div class="formPicture marginPictureBox">
+                <img src="{{asset('images/profil.svg')}}" alt="photo de profil">
+            </div>
+        </div>
+    </section>
+{% endblock %}

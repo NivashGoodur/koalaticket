@@ -1,0 +1,27 @@
+h1,a,h2{
+    text-align: center;
+    display: block;
+}
+.articles, .comments{
+    width: 75%;
+    margin: auto;
+    border: 2px solid #F1F1F1;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.header{
+    background-color: #D8D8D8;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    margin: 0;
+}
+.body-card{
+    margin-left: 10px;
+}

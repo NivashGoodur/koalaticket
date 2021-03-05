@@ -1,0 +1,150 @@
+/*========================================
+Night Mode
+========================================*/
+
+body {
+    --light-black : #364b61;
+    --black : #2c3e50;
+    --black-more : #243342;
+    --dark-black : #1f2b38;
+    --dark-black-more : #151D26;
+}
+
+body {
+    background-color: var(--black-more);
+}
+
+.header {
+    background-color: var(--dark-black);
+}
+
+.user {
+    background-color: var(--dark-black-more);
+}
+
+.user:hover {
+    background-color: #121920;
+}
+
+.user_menu {
+    background-color: var(--dark-black-more);
+}
+
+.user_menu>a:hover {
+    background-color: var(--dark-black);
+}
+
+.statut {
+    background-color: var(--dark-black-more);
+    color: white;
+}
+
+.opened {
+    background-color: var(--dark-black-more);
+    color: white;
+}
+
+.ticket_night {
+    background-color: var(--dark-black);
+}
+
+.client_response {
+    background-color: var(--dark-black);
+}
+
+.statut_btn {
+    background-color: var(--dark-black);
+}
+
+.login_input {
+    background-color: var(--dark-black);
+    border: solid 2px rgba(255, 255, 255, 0.062);
+    color: white;
+}
+
+.ticket_title>p {
+    background-color: var(--dark-black-more);
+    color: white;
+}
+
+.ticket_form {
+    background-color: var(--dark-black);
+}
+
+.ticket_form>h1 {
+    color: white;
+}
+
+.ticket_information {
+    background-color: var(--dark-black);
+}
+
+.ticket_information>h1 {
+    color: white;
+}
+
+.ticket_information_box {
+    background-color: var(--dark-black-more);
+    color: white;
+}
+
+.ticket_information_box>i {
+    color: white;
+}
+
+.opened_title {
+    background-color: var(--dark-black);
+}
+
+.formPicture {
+    background-color: var(--dark-black);
+}
+
+.input_file_type {
+    background-color: var(--dark-black-more);
+    color: white;
+}
+
+footer {
+    background-color: var(--dark-black);
+}
+
+
+@media screen and (max-width: 1200px) {
+
+    .opened_mobile {
+        background-color: var(--dark-black-more);
+        color: white;
+    }
+
+    .ticket_box {
+        background-color: var(--dark-black);
+    }
+    
+
+}
+
+@media screen and (max-width: 900px) {
+
+    .opened_mobile {
+        background-color: var(--dark-black-more);
+        color: white;
+    }
+
+    .ticket_box {
+        background-color: var(--dark-black);
+    }
+}
+
+.login_input {
+    border: none;
+}
+
+.login_input_full {
+    border: solid 1px rgba(255, 255, 255, 0.178);
+    color: white;
+}
+
+.login_input_full>i {
+    color: white;
+}

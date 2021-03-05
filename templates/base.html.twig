@@ -1,0 +1,85 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% if config == null %}Koala Ticket - {% else %} {{config.name}} - {% endif %}{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/animation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/magic.min.css') }}">
+    {% if (app.user.nightmode == '{{asset("css/nightmode.css")}}') %}
+        <link rel="stylesheet" href="{{ asset('css/nightmode.css') }}">
+    {% endif %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}" />
+
+    {# Inclusion des fichiers CSS individuel de la page #}
+    {% block css %}{% endblock %}
+</head>
+<body id="body">
+    <header class="header" id="header" style="{% if (app.user.nightmode != '{{asset("css/nightmode.css")}}') %}{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}{% endif %}">
+        <div class="menu">
+            <div class="logo">
+                <a href="{{ path('dash_client') }}"><img src="{% if config == null %}{{ asset('images/koala.png') }} {% else %}{{ asset(config.logo) }}{% endif %}" alt="Logo du site"></a>
+                <div class="line_vertical"></div>
+
+                    {% if (app.user.roles[0] == 'ROLE_ADMIN') %}
+                    <a href="">Administration</a>
+                    {% else %}
+                    <a href="{{ path('koala_faq') }}">Questions fréquentes</a>
+                    {% endif %}
+            </div>
+            <div class="user" id="user">
+                <div class="user_box">
+                    <div class="user_picture">
+                        {% if (app.user.picture == null) %}
+                        <img src="{{ asset('images/default.png') }}" alt="">
+                        {% else %}
+                        <img src="{{ asset(app.user.picture) }}" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="user_info">
+                        <p class="user_name">{{ app.user.firstname }}</p>
+                        <p class="user_account">{{ is_granted('ROLE_ADMIN')? 'Compte Admin' : 'Compte Client' }}</p>
+                    </div>
+                </div>
+                <div class="user_menu hidden boingInUp" id="dropmenu" style="{% if (app.user.nightmode != '{{asset("css/nightmode.css")}}') %}{% if config == null %}{% else %}background-color:{{config.color}};border: solid 1px #00000024;{% endif %}{% endif %}">
+                    {% if (app.user.roles[0] == 'ROLE_ADMIN') %}
+                    <a href="{{ path('main_config')}}"><i class="fas fa-cog"></i> Configuration</a>
+                    {% endif %}
+                    <a href="{{ path('update_profile')}}"><i class="fas fa-user"></i> Profil</a>
+                    <a href="{{ path('nightmode')}}">{{ app.user.nightmode == '{{asset("css/nightmode.css")}}'? '<i class="fas fa-sun"></i> Mode jour' : '<i class="fas fa-moon"></i> Mode nuit' }}</a>
+                    <a href="{{ asset('logout')}}" class="logout_link"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                </div>
+            </div>
+        </div>
+        {% block articles %}{% endblock %}
+    </header>
+
+
+
+    {# Affichage du contenu principal de la page #}
+    {% block body %}{% endblock %}
+
+    <footer style="{% if (app.user.nightmode != '{{asset("css/nightmode.css")}}') %}{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}{% endif %}">
+        <div class="copyright">
+            <p>Copyright 2021-2022</p>
+            <div class="license">
+                <img src="{{ asset('images/koala.png') }}" alt="Logo du site">
+                <a href="https://github.com/joumel/Koala-Ticket">Koala Ticket System</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ asset('js/dropdown_menu.js') }}"></script>
+    <script src="{{ asset('js/nightmode.js') }}"></script>
+    <script src="{{ asset('js/change-logo.js') }}"></script>
+
+    {# Inclusion des fichiers JS individuel de la page #}
+    {% block js %}{% endblock %}
+</body>
+</html>

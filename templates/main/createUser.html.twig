@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'un membre staff{% endblock %}
+
+{% block articles %}
+
+<!-- Affichage message de succes -->
+
+	    <div class="popupSuccess">
+            {% for message in app.flashes('addUserSuccess') %}
+            <div class="success-div swashOut">{{ message }}</div>
+            {% endfor %}
+	    </div>
+
+<div class="line_horizontal"></div>
+        <div class="head_ticket">
+            <div class="head_ticket_btn">
+                <div class="ticket_title">
+                    <p>Ajoutez un membre à votre équipe</p>
+                </div>
+                 <div class="btn_box">
+                    <a class="primary_btn_white" href="{{ path('main_config')}}">Retour</a>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block body %}
+
+    <section class="statut_top">
+        <div class="statut" id="statut">
+            <div class="statut_text">
+                <p>Il y a plus d’idées dans deux têtes que dans une.</p>
+                <p>Lorsque deux forces sont jointes, leur efficacité est double.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="formPictureFull">
+        <div class="profile_update_box">   
+            <div class="formPicture">
+                <form name="staff" method="post" style="width: 100%;">
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Prénom du membre</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="staff_firstname" name="staff[firstname]" required="required" class="login_input" placeholder="Prénom du nouveau staff">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Nom du membre</p>
+                        </div>
+                        <div class="login_input_full">
+                             <i class="fas fa-user"></i>
+                            <input type="text" id="staff_lastname" name="staff[lastname]" required="required" class="login_input" placeholder="Nom du nouveau staff">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Email du membre</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-envelope-open"></i>
+                            <input type="text" id="staff_email" name="staff[email]" required="required" class="login_input" placeholder="Email du nouveau staff">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Mot de passe</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-key"></i>
+                            <input type="password" id="staff_plainPassword_first" name="staff[plainPassword][first]" required="required" placeholder="Mot de passe" class="login_input">
+                        </div>
+                    </div>
+                    <div class="formAll">
+                        <div class="labelInput">
+                            <p>Vérification</p>
+                        </div>
+                        <div class="login_input_full">
+                            <i class="fas fa-key"></i>
+                            <input type="password" id="staff_plainPassword_second" name="staff[plainPassword][second]" required="required" placeholder="Nouveau mot de passe" class="login_input">
+                        </div>
+                    </div>
+                    <button type="submit" id="staff_save" name="staff[save]" class="login_button input_size_ticket" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Ajouter un utilisateur</button>
+                    {{ form_row(form._token) }}
+                </form>
+            </div>
+            <div class="formPicture marginPictureBox">
+                <img src="{{asset('images/team.svg')}}" alt="imgTeam">
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

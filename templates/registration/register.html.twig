@@ -1,0 +1,88 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Koala Ticket - Connexion</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.7.3/themes/base/jquery-ui.css">
+
+    {# Inclusion des fichiers CSS individuel de la page #}
+    {% block css %}{% endblock %}
+</head>
+
+<body class="login" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="login_errors" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    <form class="login_form m_margin_top" name="registration_form" method="POST" novalidate="novalidate">
+        <img src="{% if config == null %}{{ asset('images/koala.png')}}{% else %}{{ asset(config.logo)}}{% endif %}" class="login_logo" alt="logo du site">
+        <div class="error_msg">
+            {{ form_errors(registrationForm.firstname) }}
+        </div>
+        <div class="login_input_full">
+            <i class="fas fa-user"></i>
+            {{ form_widget(registrationForm.firstname) }}
+        </div>
+        <div class="error_msg">
+            {{ form_errors(registrationForm.lastname) }}
+        </div>
+        <div class="login_input_full">
+            <i class="fas fa-user"></i>
+            {{ form_widget(registrationForm.lastname) }}
+        </div>
+        <div class="error_msg">
+            {{ form_errors(registrationForm.address) }}
+        </div>
+        <div class="login_input_full">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ form_widget(registrationForm.address) }}
+        </div>
+        <div class="error_msg">
+            {{ form_errors(registrationForm.email) }}
+        </div>
+        <div class="login_input_full">
+            <i class="fas fa-envelope-open"></i>
+            {{ form_widget(registrationForm.email) }}
+        </div>
+        <div class="error_msg">
+            {{ form_errors(registrationForm.plainPassword.first) }}
+        </div>
+        <div class="error_msg">
+            {{ form_errors(registrationForm.plainPassword.second) }}
+        </div>
+
+        <div class="login_input_full">
+            <i class="fas fa-unlock-alt"></i>
+            <input type="password" id="registration_form_plainPassword_first" name="registration_form[plainPassword][first]" required="required" class="login_input" placeholder="Votre mot de passe">
+        </div>
+        
+        <div class="login_input_full">
+            <i class="fas fa-unlock-alt"></i>
+            <input type="password" id="registration_form_plainPassword_second" name="registration_form[plainPassword][second]" required="required" class="login_input" placeholder="Confirmation du mot de passe">
+        </div>
+        <div class="login_input_full">
+            <div class="checkbox_agree"><label for="registration_form_agreeTerms" class="required">J'accepte <a href="{{ asset('cgu')}}" class="cgu_link" style="{% if config == null %}{% else %}color:{{config.color}};{% endif %}">les conditions générales</a></label><input type="checkbox" id="registration_form_agreeTerms" name="registration_form[agreeTerms]" required="required" value="1"></div>
+        </div>
+        <div class="error_msg">
+            {{ form_errors(registrationForm) }}
+            <div class="form-group error_msg">
+                <div class="g-recaptcha" data-sitekey="{{ google_recaptcha_site_key }}"></div>
+            </div>
+        </div>
+        <button type="submit" class="login_button" style="{% if config == null %}{% else %}background-color:{{config.color}};{% endif %}">Inscription</button>
+        {{ form_row(registrationForm._token) }}
+    </form>
+    <div class="login_form m_margin_none">
+        <a href="{{ asset('login') }}" class="already_account_link">J'ai déjà un compte <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="js/address.js"></script>
+</body>
